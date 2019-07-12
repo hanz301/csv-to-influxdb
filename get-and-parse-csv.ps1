@@ -6,9 +6,9 @@ Set-Variable -Name ExportFolder -Value "C:\LOGS" #change to own leisure, all csv
 
 $el_c = @()   #consolidated error log
 
-$now=(Get-Date).AddMinutes(-60)
+$now=(Get-Date).AddMinutes(-60) ## create param ##
 #$startdate=$now
-$ExportFile= "el_$comp" + $now.ToString("yyyy-MM-dd---hh-mm-ss") + ".csv"  # we cannot use standard delimiters like ":"
+$ExportFile= "el_$comp" + $now.ToString("yyyy-MM-dd---hh-mm-ss") + ".csv"  ## we cannot use standard delimiters like ":"
 
 echo "now: $now"
 #echo "EventAge: $EventAgeDays"
@@ -18,7 +18,7 @@ foreach($comp in $compArr)
 { 
 $tp = Test-Path -PathType Container "$ExportFolder\$comp"
 
-if ($tp -eq $false) #If $tp is false, then create folder corresponding to $comp
+if ($tp -eq $false) ##If $tp is false, then create folder corresponding to $comp
   {
   New-Item -ItemType Directory -Force -Path $ExportFolder\$comp | Out-Null
   echo "creating dir for $comp"
@@ -53,7 +53,7 @@ $ExportFile= "el_$comp" + "_" + $now.ToString("yyyy-MM-dd hh-mm-ss") + ".csv"  #
 $el_finale | Out-File $ExportFolder\$comp\$ExportFile -Encoding utf8
 #Invoke-WebRequest -UseBasicParsing $inpipipfluxURL -ContentType "text/csv" -Method POST -Body $el_finale
 }
-#Calling the Python script, make sure to have installed dependendacies 
+#Calling the Python script, make sure to have installed dependendacies (It will complain about which modules are missing, so np) 
 python.exe .\csv-to-influxdb.py `
 --input $ExportFolder\$comp\$ExportFile `
 --server 'Hostname:Port' ` #InfluxDB 
